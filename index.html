@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Simple MVC</title>
+</head>
+<body>
+	<h3>Counter Example</h3>
+	<div id="counter" style="margin-bottom:15px"></div>
+	<button onclick="smvc.controller.execute('counter');">Add Counter</button>
+	<script src="src/smvc.js"></script>
+	<script>
+		// Add Model
+		smvc.model.add("counter", function(data){
+			if(typeof data==="undefined"){ // first time execution, return initial data
+				return 1;
+			}
+			return data+1;
+		});
+		// Add View
+		smvc.view.add("counter", function(view, data){
+			view.textContent=data;
+		}, document.querySelector("#counter"));
+		// Add Controller
+		smvc.controller.add("counter", function(key){
+			let data=smvc.model.execute(key);
+			smvc.view.execute(key, data);
+		});
+		// Initialize All
+		smvc.init();
+	</script>
+</body>
+</html>
