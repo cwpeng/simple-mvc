@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<meta charset="utf-8" />
+<title>Simple MVC</title>
+<style>
+.counter{
+	margin-bottom:15px
+}
+</style>
+</head>
+<body>
+	<h3>Counter Example 1</h3>
+	<div id="counter-add" class="counter"></div>
+	<button onclick="smvc.controller.execute('counter-add');">Add Count</button>
+	<h3>Counter Example 2</h3>
+	<div id="counter-minus" class="counter"></div>
+	<button onclick="smvc.controller.execute('counter-minus');">Minus Count</button>
+	<script src="../../src/smvc.js"></script>
+	<script>
+		/*
+			Counter Add: show basic usage of implementing a feature by add MVC separately
+		*/
+		// Add Model
+		smvc.model.add("counter-add", function(data){
+			if(typeof data==="undefined"){ // first time execution, return initial data
+				return 1;
+			}
+			return data+1;
+		});
+		// Add View
+		smvc.view.add("counter-add", function(root, data){
+			root.textContent=data;
+		}, document.querySelector("#counter-add"));
+		// Add Controller
+		smvc.controller.add("counter-add", function(key){
+			let data=smvc.model.execute(key);
+			smvc.view.execute(key, data);
+		});
+
+		/*
+			Counter Minus: show basic usage of implementing a feature by add MVC at once
+		*/
+		// Add Model, View, Controller at once
+		smvc.add("counter-minus", {
+			handler:function(data){
+				if(typeof data==="undefined"){ // first time execution, return initial data
+					return 100;
+				}
+				return data-1;
+			}
+		}, {
+			handler:function(root, data){
+				root.textContent=data;
+			},
+			root:document.querySelector("#counter-minus")
+		}, {
+			handler:function(key){
+				let data=smvc.model.execute(key);
+				smvc.view.execute(key, data);
+			}
+		});
+		// Initialize All
+		smvc.init();
+	</script>
+</body>
+</html>

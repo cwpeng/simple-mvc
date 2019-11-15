@@ -2,6 +2,11 @@ let smvc={};
 smvc.init=function(){
 	this.controller.init();
 };
+smvc.add=function(key, model, view, controller){
+	this.model.add(key, model.handler);
+	this.view.add(key, view.handler, view.root);
+	this.controller.add(key, controller.handler);
+};
 smvc.model={
 	instances:{},
 	add:function(key, handler){
@@ -18,15 +23,15 @@ smvc.model={
 };
 smvc.view={
 	instances:{},
-	add:function(key, handler, view){
+	add:function(key, handler, root){
 		this.instances[key]={
 			handler:handler,
-			view:view
+			root:root
 		};
 	},
 	execute:function(key, data){
 		let instance=this.instances[key];
-		instance.handler(instance.view, data);
+		instance.handler(instance.root, data);
 	}
 };
 smvc.controller={
